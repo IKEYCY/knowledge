@@ -1,0 +1,19 @@
+1.防止路由重复点击报错
+const originalPush = Router.prototype.push;
+const originalReplace = Router.prototype.replace;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err);
+};
+Router.prototype.replace = function replace(location) {
+  return originalReplace.call(this, location).catch((err) => err);
+};
+解释：
+这段代码看起来是用于改变Vue.js应用中的Vue Router的默认行为。Vue Router是Vue.js官方提供的路由管理器，用于在单页面应用中管理页面的导航和路由。
+
+在这段代码中，首先保存了Vue Router原始的`push`和`replace`方法的引用到`originalPush`和`originalReplace`变量中，然后对`Router.prototype.push`和`Router.prototype.replace`进行了修改。
+
+1. `Router.prototype.push` 方法被修改，以便捕获导航中的错误。原始的 `push` 方法用于将用户导航到新的路由地址，但如果导航失败，它可能会抛出一个错误。这里通过调用 `originalPush.call(this, location)` 来执行原始的 `push` 方法，并通过 `.catch((err) => err)` 来捕获任何可能的错误。这样做的目的是防止导航错误抛出到全局，而是返回一个表示错误的Promise，以便在需要时进行处理。
+
+2. 同样地，`Router.prototype.replace` 方法也被修改，以便捕获导航中的错误。`replace` 方法通常用于替换当前路由，而不是创建一个新的历史记录条目。修改的方式与 `push` 方法类似，通过调用 `originalReplace.call(this, location)` 来执行原始的 `replace` 方法，并通过 `.catch((err) => err)` 来捕获可能的错误。
+
+这个代码片段的主要目的是提高路由操作的健壮性，确保即使在导航过程中出现错误，应用也不会崩溃，而是能够在错误发生时进行适当的处理。这对于用户体验和应用的稳定性都是很重要的。
