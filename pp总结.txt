@@ -63,3 +63,212 @@ Vue组件通常由三个文件组成：模板文件（template），脚本文件
 子组件的样式部分定义了统计数据的样式，使用了网格布局和一些样式属性来实现布局和样式效果。
 
 通过将组件拆分为父组件和子组件，可以提高代码的可维护性和复用性。父组件负责管理数据和业务逻辑，子组件负责展示数据和样式。这种组件化的开发方式可以使代码更加清晰和结构化，并方便在其他地方重用组件。
+
+
+Q: 你封装过哪些组件以及如何进行封装？
+
+A: 在我之前的项目中，我封装了两个组件：`Subscribeoverview` 和 `SubscribeOverviewData`。
+
+`Subscribeoverview` 组件是一个父组件，用于展示统计数据。它具有以下特点和封装方式：
+
+- 它接受 `loading` 属性来显示加载状态，以及 `isNoBor` 属性来控制是否显示边框。
+- 它通过 `@dateUpdate` 事件来触发更新数据的方法 `getOverView`。
+- 它使用了 `refs` 来引用子组件 `dateRange`，以便在触发事件时调用子组件方法。
+- 它包含一个插槽，用于插入子组件 `SubscribeOverviewData` 来展示具体的统计数据。
+
+`SubscribeOverviewData` 组件用于展示订阅的详细数据，具有以下特点和封装方式：
+
+- 它接受 `overviewData` 属性作为输入，用于展示具体的统计数据。
+- 它使用了计算属性和条件渲染，只有在 `overviewData` 不为空对象时才会显示统计数据。
+- 它具有一个辅助方法 `hasVal`，用于检查数值是否存在，以便根据需要进行显示和隐藏。
+
+这些组件的封装目的是提高代码复用性和可维护性。它们使用了面向对象编程的原则和组件化开发的思想。通过将功能模块化封装，我们可以在不同的项目中重复使用这些组件，并且可以更好地组织和维护代码。
+
+通过这种封装方式，我能够在项目中轻松地使用这些组件，根据需要进行配置和定制。同时，这种封装也使得代码更易于理解、扩展和测试。我在实际项目中的应用经验让我对组件封装的设计考虑因素有了更深入的理解，并且在开发过程中不断改进和优化组件的设计。
+
+在封装这些组件时，我确实遇到了一些挑战。以下是我在封装过程中遇到的一些主要挑战：
+
+1. 组件设计的灵活性：封装组件时，我需要考虑组件的设计如何能够灵活适应不同的使用场景和需求。我需要权衡各种设计选项，例如组件的可定制性、参数配置方式、插槽的使用等。确保组件既能满足当前项目的需求，又能够在将来的项目中重用和扩展。
+
+2. 数据传递和通信：在组件封装过程中，我需要确保数据的正确传递和组件之间的通信。特别是在父子组件之间传递数据和触发事件时，我需要仔细设计和处理数据流，以避免出现意外的错误或不一致性。
+
+3. 样式和布局：封装组件时，我也需要考虑到样式和布局的问题。如何保证组件的样式与整体风格一致，并且能够适应不同的屏幕尺寸和响应式布局是一个挑战。我需要仔细调整和测试样式，确保组件在不同环境下都能正常显示和交互。
+
+4. 兼容性和浏览器支持：在封装组件时，我也要考虑到不同浏览器的兼容性和支持。某些特定的 CSS 属性或 JavaScript 方法可能在某些浏览器中不被支持，因此我需要时刻关注并进行必要的兼容性处理，以保证组件在各种浏览器中都能正常运行。
+
+这些挑战在组件封装过程中是常见的，但通过仔细的规划、设计和测试，结合不断积累的经验，我能够克服这些挑战并成功地封装出高质量、可重用的组件。
+
+
+你封装过组件吗？？说一下组件封装？？？？你在项目中是如何封装组件的？
+以上问题是面试官，最常问到的问题？那么你应该如何回答呢？
+答： 我用vue开发的所有项目，都是采用组件化的思想开发的。一般我在搭建项目的时候，会创建一个views目录和一个commen目录和一个feature目录，views目录中放页面级的组件，commen中放公共组件（如：head（公共头组件），foot（公共底部组件）等），feature目录内放功能组件（如：swiper(轮播功能组件)，tabbar(切换功能组件)、list(上拉加载更多功能组件)）
+
+首先，组件可以提升整个项目的开发效率。能够把页面抽象成多个相对独立的模块，解决了我们传统项目开发：效率低、难维护、复用性低等问题。
+
+使用Vue.extend方法创建一个组件，然后使用Vue.component方法注册组件。但是我们一般用脚手架开发项目，每个 .vue单文件就是一个组件。在另一组件import 导入，并在components中注册，子组件需要数据，可以在props中接受定义。而子组件修改好数据后，想把数据传递给父组件。可以采用emit方法。组件封装无非就是组件间通信或者复杂一些嵌套的组件通过使用slot插槽来实现等等。
+
+
+封装一个查询组件的方式可以根据具体需求和应用场景的不同而有所差异。以下是一个通用的查询组件的封装示例：
+
+```vue
+<template>
+  <div class="query-container">
+    <input type="text" v-model="query" placeholder="输入查询条件">
+    <button @click="handleSearch">查询</button>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'QueryComponent',
+  data() {
+    return {
+      query: ''
+    };
+  },
+  methods: {
+    handleSearch() {
+      this.$emit('search', this.query);
+    }
+  }
+};
+</script>
+
+<style scoped>
+.query-container {
+  /* 查询组件的样式 */
+  /* ... */
+}
+</style>
+```
+
+在这个示例中，我们封装了一个名为 `QueryComponent` 的查询组件。它具有以下特点和实现方式：
+
+- `QueryComponent` 组件包含一个文本输入框和一个查询按钮。
+- 文本输入框使用 `v-model` 指令与 `query` 数据属性双向绑定，用于接收用户输入的查询条件。
+- 查询按钮绑定了 `handleSearch` 方法，当用户点击按钮时，会触发 `search` 事件，并通过 `$emit` 方法将查询条件 `query` 作为参数传递给父组件。
+- 组件的样式使用了样式作用域（`scoped`），确保样式只应用于组件本身，不会影响其他组件或全局样式。
+
+使用这个查询组件时，可以在父组件中监听 `search` 事件，并在回调函数中处理查询逻辑。例如：
+
+```vue
+<template>
+  <div>
+    <query-component @search="handleSearch"></query-component>
+  </div>
+</template>
+
+<script>
+import QueryComponent from './QueryComponent.vue';
+
+export default {
+  components: {
+    QueryComponent
+  },
+  methods: {
+    handleSearch(query) {
+      // 处理查询逻辑，根据查询条件执行相应的操作
+      console.log('查询条件:', query);
+    }
+  }
+};
+</script>
+``以上示例展示了一个简单的查询组件的封装方式。你可以根据自己的需求和项目的特点对查询组件进行进一步的定制和扩展。例如，可以添加更多的查询选项（如下拉框、复选框等），增加样式和动画效果，或者与后端进行数据交互等。封装查询组件的目的是提供一个可复用的、易于集成的查询功能，以增强应用的交互性和用户体验。
+
+
+除了使用 `v-if` 来控制按钮及其他组件的显示与隐藏外，还可以使用以下方法来实现权限控制：
+
+1. **动态路由配置**：在后台管理系统中，可以根据用户的权限动态配置路由。根据用户的角色或权限级别，将特定的路由添加到路由表中，只有拥有相应权限的用户才能访问对应的页面和组件。
+
+2. **权限指令**：创建自定义指令，例如 `v-permission`，并在组件中使用该指令来控制元素的显示与隐藏。指令可以根据用户的权限信息进行判断，并根据权限决定是否显示元素。
+
+3. **权限管理中心**：建立一个权限管理中心，用于管理用户的权限信息。在组件中通过访问权限管理中心来获取当前用户的权限信息，并根据权限信息动态控制按钮及其他组件的显示与隐藏。
+
+4. **动态组件**：使用动态组件的方式，在父组件中根据用户的权限动态选择渲染不同的子组件。根据用户的角色或权限级别，动态切换不同的组件，从而实现权限控制。
+
+5. **权限控制 mixin**：创建一个权限控制的 mixin，将权限相关的逻辑封装在 mixin 中，然后在需要进行权限控制的组件中引入该 mixin。在组件中使用 mixin 提供的方法或属性来控制按钮及其他组件的显示与隐藏。
+
+这些方法可以根据具体的项目需求和技术栈来选择和组合使用。它们可以在不同的层面和场景中实现权限控制，从路由层面到组件层面，提供了灵活的权限管理方案，以确保用户只能访问和操作其具备权限的功能和组件。
+
+
+实现动态组件可以使用 Vue.js 提供的 `<component>` 元素或者 `:is` 特性。以下是两种常见的实现方式：
+
+1. 使用 `<component>` 元素：
+
+```vue
+<template>
+  <div>
+    <component :is="currentComponent"></component>
+  </div>
+</template>
+
+<script>
+import ComponentA from './ComponentA.vue';
+import ComponentB from './ComponentB.vue';
+
+export default {
+  data() {
+    return {
+      currentComponent: null
+    };
+  },
+  methods: {
+    showComponentA() {
+      this.currentComponent = ComponentA;
+    },
+    showComponentB() {
+      this.currentComponent = ComponentB;
+    }
+  },
+  mounted() {
+    // 根据条件选择要显示的组件
+    if (/* 某个条件 */) {
+      this.showComponentA();
+    } else {
+      this.showComponentB();
+    }
+  }
+};
+</script>
+```
+
+在上面的示例中，使用了 `<component>` 元素并通过 `:is` 特性动态绑定要渲染的组件。通过在 `currentComponent` 数据属性中维护要显示的组件的引用，可以根据条件在 `mounted` 钩子函数中选择要显示的组件。在 `showComponentA` 和 `showComponentB` 方法中，将相应的组件赋值给 `currentComponent`，从而实现动态组件的切换。
+
+2. 使用 `:is` 特性：
+
+```vue
+<template>
+  <div>
+    <div>
+      <button @click="showComponentA">显示组件A</button>
+      <button @click="showComponentB">显示组件B</button>
+    </div>
+    <component :is="currentComponent"></component>
+  </div>
+</template>
+
+<script>
+import ComponentA from './ComponentA.vue';
+import ComponentB from './ComponentB.vue';
+
+export default {
+  data() {
+    return {
+      currentComponent: null
+    };
+  },
+  methods: {
+    showComponentA() {
+      this.currentComponent = 'ComponentA';
+    },
+    showComponentB() {
+      this.currentComponent = 'ComponentB';
+    }
+  }
+};
+</script>
+```
+
+在这个示例中，通过在 `currentComponent` 数据属性中维护要显示的组件的名称，可以通过字符串的形式动态绑定要渲染的组件。当点击按钮时，调用相应的方法来改变 `currentComponent` 的值，从而切换要显示的组件。
+
+这两种方式都可以实现动态组件的切换，具体选择哪种方式取决于你的项目需求和偏好。请根据实际情况选择适合的方式来实现动态组件。
